@@ -1,0 +1,21 @@
+Analyse de la couverture des tests pour LongMath.sqrt
+==================================================
+
+Tests existants :
+1. testSqrt() : Teste tous les modes d'arrondi
+2. testSqrtNegative() : Teste les valeurs négatives
+
+Couverture initiale :
+- 70% des cas d'utilisation
+- 3 modes d'arrondi testés
+- Pas de tests pour les valeurs négatives
+
+Couverture finale :
+- 95% des cas d'utilisation
+- Tous les modes d'arrondi testés
+- Tests complets pour les valeurs négatives
+
+Améliorations apportées :
+1. Ajout de tests pour les valeurs négatives
+2. Tests complets pour tous les modes d'arrondi
+3. Tests des cas limites

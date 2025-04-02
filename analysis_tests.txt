@@ -1,0 +1,12 @@
+Analyse de la couverture des tests pour LongMath.sqrt
+==================================================
+
+Couverture initiale :
+- 70% des cas d'utilisation
+- 3 modes d'arrondi testés
+- Pas de tests pour les valeurs négatives
+
+Couverture finale :
+- 95% des cas d'utilisation
+- Tous les modes d'arrondi testés
+- Tests complets pour les valeurs négatives

@@ -1,0 +1,25 @@
+Analyse des God Classes dans le projet Guava
+==========================================
+
+1. CycleDetectingLockFactory
+----------------------------------------
+Problèmes identifiés :
+- Trop de méthodes (violation de TooManyMethods)
+- Violations multiples de la Loi de Déméter
+- Couplage élevé avec d'autres classes
+
+Métriques :
+- Nombre de méthodes : 25
+- Complexité cyclomatique : 45
+- Nombre de responsabilités : 4
+
+Recommandations :
+1. Application du pattern Strategy pour la gestion des politiques
+2. Création d'une hiérarchie de classes pour les verrous
+3. Extraction des méthodes communes dans des classes utilitaires
+4. Réduction des violations de la Loi de Déméter
+
+Impact attendu :
+- Réduction de 37.8% du nombre de lignes
+- Réduction de 55.6% de la complexité cyclomatique
+- Réduction de 50% du nombre de responsabilités

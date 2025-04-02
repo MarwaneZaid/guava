@@ -926,4 +926,50 @@ public class LongMathTest extends TestCase {
   private static void failFormat(String template, Object... args) {
     assertWithMessage(template, args).fail();
   }
+
+  @Test
+  public void testSqrt() {
+    for (long x : POSITIVE_LONG_CANDIDATES) {
+      for (RoundingMode mode : ALL_ROUNDING_MODES) {
+        long result = LongMath.sqrt(x, mode);
+        // Test that the result is the correct square root
+        assertTrue(result * result <= x);
+        assertTrue((result + 1) * (result + 1) > x);
+        // Test that the result is correctly rounded
+        switch (mode) {
+          case UNNECESSARY:
+            assertEquals(x, result * result);
+            break;
+          case FLOOR:
+          case DOWN:
+            assertTrue(result * result <= x);
+            break;
+          case CEILING:
+          case UP:
+            assertTrue((result - 1) * (result - 1) < x);
+            break;
+          case HALF_DOWN:
+          case HALF_UP:
+          case HALF_EVEN:
+            long halfSquare = result * result + result;
+            assertTrue(halfSquare < 0 || halfSquare > x);
+            break;
+          default:
+            fail("Unknown rounding mode: " + mode);
+        }
+      }
+    }
+  }
+
+  @Test
+  public void testSqrtNegative() {
+    for (long x : NEGATIVE_LONG_CANDIDATES) {
+      try {
+        LongMath.sqrt(x, RoundingMode.UNNECESSARY);
+        fail("Expected IllegalArgumentException");
+      } catch (IllegalArgumentException expected) {
+        // Expected
+      }
+    }
+  }
 }

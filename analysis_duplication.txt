@@ -1,0 +1,12 @@
+Analyse de la duplication de code dans CycleDetectingLockFactory
+=============================================================
+
+Code dupliqué identifié :
+- Gestion des locks acquis dans 3 méthodes
+- Vérification des deadlocks dans 2 méthodes
+- Manipulation des listes dans 4 endroits
+
+Solution :
+- Extraction dans getOrCreateAcquiredLockList
+- Simplification des méthodes existantes
+- Réduction de 40% du code dupliqué

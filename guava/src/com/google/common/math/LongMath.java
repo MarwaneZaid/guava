@@ -295,13 +295,12 @@ public final class LongMath {
   }
 
   /**
-   * Returns the square root of {@code x}, rounded with the specified rounding mode.
+   * Returns the square root of x, rounded with the specified rounding mode.
    *
-   * @throws IllegalArgumentException if {@code x < 0}
-   * @throws ArithmeticException if {@code mode} is {@link RoundingMode#UNNECESSARY} and {@code
-   *     sqrt(x)} is not an integer
+   * @throws IllegalArgumentException if x < 0
+   * @throws ArithmeticException if mode is RoundingMode.UNNECESSARY and sqrt(x) is not an integer
    */
-  @GwtIncompatible // TODO
+  @GwtIncompatible // need BigIntegerMath to adequately test
   public static long sqrt(long x, RoundingMode mode) {
     checkNonNegative("x", x);
     if (fitsInInt(x)) {
@@ -310,64 +309,37 @@ public final class LongMath {
     return sqrtLong(x, mode);
   }
 
-  @GwtIncompatible // TODO
   private static long sqrtLong(long x, RoundingMode mode) {
-    long guess = (long) Math.sqrt((double) x);
-    long guessSquared = guess * guess;
-    
+    long sqrtFloor = sqrtFloor(x);
     switch (mode) {
       case UNNECESSARY:
-        checkRoundingUnnecessary(guessSquared == x);
-        return guess;
+        checkRoundingUnnecessary(sqrtFloor * sqrtFloor == x);
+        return sqrtFloor;
       case FLOOR:
       case DOWN:
-        return handleFloorOrDown(x, guess, guessSquared);
+        return sqrtFloor;
       case CEILING:
       case UP:
-        return handleCeilingOrUp(x, guess, guessSquared);
+        return sqrtFloor + (sqrtFloor * sqrtFloor == x ? 0 : 1);
       case HALF_DOWN:
       case HALF_UP:
       case HALF_EVEN:
-        return handleHalfRounding(x, guess, guessSquared, mode);
+        long halfSquare = sqrtFloor * sqrtFloor + sqrtFloor;
+        return sqrtFloor + (halfSquare < 0 | halfSquare > x ? 1 : 0);
       default:
         throw new AssertionError();
     }
   }
 
-  private static long handleFloorOrDown(long x, long guess, long guessSquared) {
-    return (x < guessSquared) ? guess - 1 : guess;
+  private static long sqrtFloor(long x) {
+    // There is no loss of precision in converting an int to a double, and floor of sqrt is never
+    // greater than the true sqrt
+    return (long) Math.sqrt(x);
   }
 
-  private static long handleCeilingOrUp(long x, long guess, long guessSquared) {
-    return (x > guessSquared) ? guess + 1 : guess;
-  }
-
-  private static long handleHalfRounding(long x, long guess, long guessSquared, RoundingMode mode) {
-    long sqrtFloor = guess - ((x < guessSquared) ? 1 : 0);
-    long halfSquare = sqrtFloor * sqrtFloor + sqrtFloor;
-    
-    if (halfSquare == Long.MAX_VALUE) {
-      return sqrtFloor;
-    }
-    
-    long deltaToFloor = x - sqrtFloor * sqrtFloor;
-    long deltaToCeiling = (sqrtFloor + 1) * (sqrtFloor + 1) - x;
-    
-    if (deltaToFloor < deltaToCeiling) {
-      return sqrtFloor;
-    } else if (deltaToFloor > deltaToCeiling) {
-      return sqrtFloor + 1;
-    } else {
-      switch (mode) {
-        case HALF_EVEN:
-          return (sqrtFloor % 2 == 0) ? sqrtFloor : sqrtFloor + 1;
-        case HALF_DOWN:
-          return sqrtFloor;
-        case HALF_UP:
-          return sqrtFloor + 1;
-        default:
-          throw new AssertionError();
-      }
+  private static void checkRoundingUnnecessary(boolean condition) {
+    if (!condition) {
+      throw new ArithmeticException("mode was UNNECESSARY, but rounding was necessary");
     }
   }
 

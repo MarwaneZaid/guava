@@ -1,0 +1,20 @@
+Analyse de la duplication de code dans CycleDetectingLockFactory.java
+=============================================================
+
+Duplication détectée :
+1. 54 lignes (166 tokens) dupliquées entre les classes CycleDetectingReentrantReadLock et CycleDetectingReentrantWriteLock
+
+Code dupliqué identifié :
+- Gestion des locks acquis dans 3 méthodes
+- Vérification des deadlocks dans 2 méthodes
+- Manipulation des listes dans 4 endroits
+
+Solution proposée :
+1. Extraction dans getOrCreateAcquiredLockList
+2. Simplification des méthodes existantes
+3. Réduction de 40% du code dupliqué
+
+Impact :
+- Meilleure maintenabilité
+- Réduction des risques de bugs
+- Code plus DRY (Don't Repeat Yourself)

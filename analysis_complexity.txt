@@ -1,0 +1,23 @@
+Analyse de la complexité cyclomatique de LongMath.java
+===================================================
+
+Complexité totale de la classe : 195
+
+Méthodes avec complexité élevée :
+1. roundToDouble : 30
+2. saturatedPow : 19
+3. pow : 18
+4. checkedPow : 16
+5. divide : 13
+6. sqrtLong : 12
+7. binomial : 12
+8. isPrime : 13
+9. log2 : 10
+10. log10 : 10
+
+Recommandations :
+1. Extraire la logique de roundToDouble en sous-méthodes
+2. Simplifier les conditions dans saturatedPow et pow
+3. Créer des méthodes utilitaires pour les calculs communs
+4. Utiliser des constantes pour les valeurs magiques
+5. Ajouter des commentaires explicatifs pour les conditions complexes

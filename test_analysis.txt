@@ -1,0 +1,99 @@
+# Analyse des tests du projet Guava
+
+## Commande utilisée
+```bash
+mvn test -Dtest=LongMathTest,CycleDetectingLockFactoryTest
+```
+
+## Résultats des tests
+
+### Erreurs de compilation
+
+1. Problèmes avec la classe CycleDetectingLockFactory :
+   - Incompatibilité entre Policy et LockPolicy
+   - Références statiques incorrectes à la variable policy
+   - Symboles manquants (THROW, WARN, DISABLED)
+   - Problèmes de conversion de types (List vs ArrayList)
+   - Switch statement incompatible avec Java 8
+
+2. Détails des erreurs :
+   ```
+   - Incompatible types: Policy cannot be converted to LockPolicy
+   - Non-static variable policy cannot be referenced from a static context
+   - Cannot find symbol: class DISABLED in class Policies
+   - Cannot find symbol: method log(Level,String,PotentialDeadlockException)
+   - Patterns in switch statements not supported in -source 8
+   ```
+
+### Actions correctives nécessaires
+
+1. Correction de la hiérarchie des types :
+   - Définir clairement la relation entre Policy et LockPolicy
+   - Assurer la compatibilité des types dans les conversions
+
+2. Correction des accès statiques :
+   - Revoir l'architecture de la classe pour éviter les références statiques incorrectes
+   - Implémenter un pattern Factory approprié
+
+3. Correction des problèmes de compilation Java 8 :
+   - Remplacer les switch expressions par des switch statements traditionnels
+   - Assurer la compatibilité avec Java 8
+
+4. Correction des problèmes de logging :
+   - Implémenter correctement les méthodes de logging
+   - Assurer la cohérence des niveaux de log
+
+## Métriques de test
+
+### Couverture initiale
+- Classes testées : 2
+  - LongMathTest
+  - CycleDetectingLockFactoryTest
+- Nombre total de tests : Non disponible (échec de compilation)
+- Couverture de code : Non disponible (échec de compilation)
+
+### Problèmes identifiés
+1. Architecture :
+   - Confusion dans la hiérarchie des types (Policy vs LockPolicy)
+   - Problèmes de design dans la gestion des politiques de verrouillage
+
+2. Compatibilité :
+   - Code non compatible avec Java 8
+   - Problèmes de conversion de types
+
+3. Qualité du code :
+   - Références statiques inappropriées
+   - Gestion des logs non standardisée
+
+## Recommandations
+
+1. Refactoring prioritaire :
+   - Clarifier la hiérarchie Policy/LockPolicy
+   - Corriger les accès statiques
+   - Standardiser la gestion des logs
+
+2. Améliorations de l'architecture :
+   - Implémenter un vrai pattern Factory
+   - Utiliser des énumérations pour les politiques
+   - Améliorer la gestion des types génériques
+
+3. Compatibilité :
+   - Assurer la compatibilité Java 8
+   - Éviter les fonctionnalités Java modernes non supportées
+
+## Plan d'action
+
+1. Phase 1 : Correction des erreurs de compilation
+   - Résoudre les problèmes de types
+   - Corriger les accès statiques
+   - Adapter le code pour Java 8
+
+2. Phase 2 : Amélioration de la couverture
+   - Ajouter des tests unitaires
+   - Tester les cas limites
+   - Vérifier les scénarios d'erreur
+
+3. Phase 3 : Refactoring
+   - Améliorer l'architecture
+   - Optimiser les performances
+   - Renforcer la maintenabilité 
