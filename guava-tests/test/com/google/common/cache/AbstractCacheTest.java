@@ -203,4 +203,37 @@ public class AbstractCacheTest extends TestCase {
     counter1.incrementBy(counter2);
     assertEquals(new CacheStats(38, 60, 44, 54, totalLoadTime, 66), counter1.snapshot());
   }
+
+  public void testSimpleStatsCounter() {
+    SimpleStatsCounter counter = new SimpleStatsCounter();
+    
+    // Test basic operations
+    counter.recordHits(5);
+    counter.recordMisses(3);
+    counter.recordLoadSuccess(100);
+    counter.recordLoadException(200);
+    counter.recordEviction();
+    
+    CacheStats stats = counter.snapshot();
+    assertEquals(5, stats.hitCount());
+    assertEquals(3, stats.missCount());
+    assertEquals(1, stats.loadSuccessCount());
+    assertEquals(1, stats.loadExceptionCount());
+    assertEquals(300, stats.totalLoadTime());
+    assertEquals(1, stats.evictionCount());
+    
+    // Test negative values handling
+    counter.recordHits(-1);
+    counter.recordMisses(-1);
+    stats = counter.snapshot();
+    assertEquals(Long.MAX_VALUE, stats.hitCount());
+    assertEquals(Long.MAX_VALUE, stats.missCount());
+    
+    // Test maximum values
+    counter.recordHits(Integer.MAX_VALUE);
+    counter.recordMisses(Integer.MAX_VALUE);
+    stats = counter.snapshot();
+    assertEquals(Integer.MAX_VALUE, stats.hitCount());
+    assertEquals(Integer.MAX_VALUE, stats.missCount());
+  }
 }

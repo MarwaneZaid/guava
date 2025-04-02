@@ -199,8 +199,8 @@ class StatsTesting {
           + (33333333.0 - LONG_MANY_VALUES_MEAN) * (33333333.0 - LONG_MANY_VALUES_MEAN)
           + (-44444444.0 - LONG_MANY_VALUES_MEAN) * (-44444444.0 - LONG_MANY_VALUES_MEAN)
           + (5555555555.0 - LONG_MANY_VALUES_MEAN) * (5555555555.0 - LONG_MANY_VALUES_MEAN);
-  static final double LONG_MANY_VALUES_MAX = 5555555555.0;
-  static final double LONG_MANY_VALUES_MIN = -44444444.0;
+  static final double LONG_MANY_VALUES_MAX = 5555555555.0;  // Large positive value for testing
+  static final double LONG_MANY_VALUES_MIN = -44444444.0;   // Large negative value for testing
 
   // Longs which will overflow if summed (using long arithmetic):
   static final long[] LARGE_LONG_VALUES = {Long.MAX_VALUE, Long.MAX_VALUE / 2};

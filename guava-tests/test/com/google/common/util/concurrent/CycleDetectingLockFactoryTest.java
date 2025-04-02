@@ -39,6 +39,18 @@ import org.jspecify.annotations.NullUnmarked;
 @NullUnmarked
 public class CycleDetectingLockFactoryTest extends TestCase {
 
+  private enum MyOrder {
+    FIRST,
+    SECOND,
+    THIRD
+  }
+
+  private enum OtherOrder {
+    FIRST,
+    SECOND,
+    THIRD
+  }
+
   private ReentrantLock lockA;
   private ReentrantLock lockB;
   private ReentrantLock lockC;
@@ -465,18 +477,6 @@ public class CycleDetectingLockFactoryTest extends TestCase {
         ReentrantReadWriteLock.class.getMethods().length);
   }
 
-  private enum MyOrder {
-    FIRST,
-    SECOND,
-    THIRD;
-  }
-
-  private enum OtherOrder {
-    FIRST,
-    SECOND,
-    THIRD;
-  }
-
   // Given a sequence of lock acquisition descriptions
   // (e.g. "LockA -> LockB", "LockB -> LockC", ...)
   // Checks that the exception.getMessage() matches a regex of the form:
@@ -484,5 +484,52 @@ public class CycleDetectingLockFactoryTest extends TestCase {
   private void checkMessage(IllegalStateException exception, String... expectedLockCycle) {
     String regex = Joiner.on("\\b.*\\b").join(expectedLockCycle);
     assertThat(exception).hasMessageThat().containsMatch(regex);
+  }
+
+  public void testDisabledPolicy() {
+    CycleDetectingLockFactory factory = CycleDetectingLockFactory.newInstance(Policies.DISABLED);
+    ReentrantLock lock1 = factory.newReentrantLock("Lock1");
+    ReentrantLock lock2 = factory.newReentrantLock("Lock2");
+
+    // With DISABLED policy, no deadlock detection should occur
+    lock2.lock();
+    lock1.lock(); // Should not throw any exception
+    lock1.unlock();
+    lock2.unlock();
+  }
+
+  public void testThrowPolicy() {
+    CycleDetectingLockFactory factory = CycleDetectingLockFactory.newInstance(Policies.THROW);
+    ReentrantLock lock1 = factory.newReentrantLock("Lock1");
+    ReentrantLock lock2 = factory.newReentrantLock("Lock2");
+
+    // Establish an acquisition order of lock1 -> lock2
+    lock1.lock();
+    lock2.lock();
+    lock1.unlock();
+    lock2.unlock();
+
+    // The opposite order should throw an exception
+    lock2.lock();
+    assertThrows(PotentialDeadlockException.class, () -> lock1.lock());
+    lock2.unlock();
+  }
+
+  public void testWarnPolicy() {
+    CycleDetectingLockFactory factory = CycleDetectingLockFactory.newInstance(Policies.WARN);
+    ReentrantLock lock1 = factory.newReentrantLock("Lock1");
+    ReentrantLock lock2 = factory.newReentrantLock("Lock2");
+
+    // Establish an acquisition order of lock1 -> lock2
+    lock1.lock();
+    lock2.lock();
+    lock1.unlock();
+    lock2.unlock();
+
+    // The opposite order should not throw an exception but should log a warning
+    lock2.lock();
+    lock1.lock(); // Should not throw any exception
+    lock1.unlock();
+    lock2.unlock();
   }
 }
