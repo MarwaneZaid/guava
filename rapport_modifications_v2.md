@@ -69,69 +69,126 @@ Nous avons choisi de nous concentrer sur ces deux classes car :
 
 ### Petites modifications
 
-1. [Renommage de variables dans LongMath](https://github.com/MarwaneZaid/guava/commit/commit1)
+1. [Renommage de variables dans LongMath](https://github.com/MarwaneZaid/guava/commit/b927bb0fd)
    - Contexte : Variables mal nommées dans les méthodes de calcul
-   - Modifications : Renommage pour plus de clarté
+   - Modifications : 
+     - Renommage de `x` en `value` pour plus de clarté
+     - Renommage de `y` en `exponent` dans les méthodes de puissance
+     - Renommage de `n` en `number` dans les méthodes de vérification
    - Impact : Meilleure lisibilité du code
+   - Justification : Les noms de variables plus descriptifs facilitent la compréhension du code
 
-2. [Suppression de code mort dans CycleDetectingLockFactory](https://github.com/MarwaneZaid/guava/commit/commit2)
+2. [Suppression de code mort dans CycleDetectingLockFactory](https://github.com/MarwaneZaid/guava/commit/82f9d9a37)
    - Contexte : Méthodes et variables non utilisées
-   - Modifications : Suppression du code mort
+   - Modifications :
+     - Suppression de la méthode `getLockGraphNode` qui n'était plus utilisée
+     - Nettoyage des variables de debug non utilisées
+     - Suppression des commentaires obsolètes
    - Impact : Réduction de la complexité
+   - Justification : Le code mort peut créer de la confusion et doit être supprimé
 
-3. [Réorganisation de la classe LongMath](https://github.com/MarwaneZaid/guava/commit/commit3)
+3. [Réorganisation de la classe LongMath](https://github.com/MarwaneZaid/guava/commit/b927bb0fd)
    - Contexte : Structure de classe non optimale
-   - Modifications : Réorganisation selon les bonnes pratiques
+   - Modifications :
+     - Regroupement des méthodes par fonctionnalité
+     - Ajout de sections de commentaires pour séparer les groupes de méthodes
+     - Réorganisation des constantes en haut de la classe
    - Impact : Meilleure maintenabilité
+   - Justification : Une meilleure organisation facilite la navigation dans le code
 
-4. [Ajout d'énumérations dans CycleDetectingLockFactoryTest](https://github.com/MarwaneZaid/guava/commit/commit4)
+4. [Ajout d'énumérations dans CycleDetectingLockFactoryTest](https://github.com/MarwaneZaid/guava/commit/82f9d9a37)
    - Contexte : Manque de types énumérés
-   - Modifications : Ajout des énumérations manquantes
+   - Modifications :
+     - Création de l'énumération `LockType` pour les différents types de verrous
+     - Création de l'énumération `TestScenario` pour les scénarios de test
+     - Utilisation des énumérations dans les méthodes de test
    - Impact : Meilleure type-safety
+   - Justification : Les énumérations réduisent les erreurs et améliorent la maintenabilité
 
-5. [Amélioration de la méthode fitsInInt](https://github.com/MarwaneZaid/guava/commit/commit5)
+5. [Amélioration de la méthode fitsInInt](https://github.com/MarwaneZaid/guava/commit/b927bb0fd)
    - Contexte : Méthode complexe et peu documentée
-   - Modifications : Amélioration de la lisibilité et documentation
+   - Modifications :
+     - Ajout de documentation JavaDoc complète
+     - Extraction de la logique de vérification dans des sous-méthodes
+     - Ajout de tests unitaires spécifiques
    - Impact : Code plus maintenable
+   - Justification : Une meilleure documentation et des tests plus complets facilitent la maintenance
 
 ### Moyennes modifications
 
-1. [Réduction de la complexité cyclomatique dans LongMath.sqrt](https://github.com/MarwaneZaid/guava/commit/commit6)
+1. [Réduction de la complexité cyclomatique dans LongMath.sqrt](https://github.com/MarwaneZaid/guava/commit/b927bb0fd)
    - Contexte : Méthode trop complexe
-   - Modifications : Extraction de la logique dans des sous-méthodes
+   - Modifications :
+     - Extraction de la logique de calcul de la racine carrée dans `calculateSquareRoot`
+     - Création d'une méthode `validateInput` pour la validation des entrées
+     - Ajout d'une méthode `handleEdgeCases` pour les cas particuliers
    - Impact : Réduction de la complexité de 66%
+   - Justification : La décomposition en méthodes plus petites améliore la lisibilité et la testabilité
 
-2. [Suppression de la duplication de code dans CycleDetectingLockFactory](https://github.com/MarwaneZaid/guava/commit/commit7)
+2. [Suppression de la duplication de code dans CycleDetectingLockFactory](https://github.com/MarwaneZaid/guava/commit/82f9d9a37)
    - Contexte : Code dupliqué dans la gestion des verrous
-   - Modifications : Extraction dans des méthodes communes
+   - Modifications :
+     - Création d'une classe utilitaire `LockUtils` pour les opérations communes
+     - Extraction des méthodes de validation dans `LockValidator`
+     - Création d'une classe `LockState` pour gérer l'état des verrous
    - Impact : Réduction de 40% du code dupliqué
+   - Justification : La réutilisation du code réduit les risques d'erreurs et facilite la maintenance
 
-3. [Ajout de tests pertinents pour LongMath.sqrt](https://github.com/MarwaneZaid/guava/commit/commit8)
+3. [Ajout de tests pertinents pour LongMath.sqrt](https://github.com/MarwaneZaid/guava/commit/b927bb0fd)
    - Contexte : Couverture de tests insuffisante
-   - Modifications : Ajout de tests complets
+   - Modifications :
+     - Ajout de tests pour les valeurs négatives
+     - Tests des cas limites (0, Long.MAX_VALUE)
+     - Tests de performance pour les grandes valeurs
    - Impact : Augmentation de la couverture à 95%
+   - Justification : Des tests complets assurent la fiabilité du code
 
 ### Grandes modifications
 
-1. [Décomposition de la god classe CycleDetectingLockFactory](https://github.com/MarwaneZaid/guava/commit/commit9)
+1. [Amélioration de la lisibilité dans LongMath.sqrt](https://github.com/MarwaneZaid/guava/commit/b927bb0fd)
+   - Contexte : Méthode complexe et peu documentée
+   - Modifications :
+     - Réécriture complète de la méthode avec une meilleure structure
+     - Ajout de commentaires explicatifs pour chaque étape
+     - Introduction de constantes nommées pour les valeurs magiques
+   - Impact : Code plus maintenable
+   - Justification : Une meilleure lisibilité facilite la maintenance et réduit les risques d'erreurs
+
+2. [Décomposition de la god class CycleDetectingLockFactory](https://github.com/MarwaneZaid/guava/commit/82f9d9a37)
    - Contexte : Classe trop complexe et avec trop de responsabilités
-   - Modifications : Application du pattern Strategy et création d'une hiérarchie de classes
+   - Modifications :
+     - Création de l'interface `LockPolicy` pour les différentes politiques
+     - Implémentation des classes `ThrowExceptionPolicy` et `LogWarningPolicy`
+     - Extraction de la logique de détection de cycle dans `CycleDetector`
    - Impact : Réduction de 37.8% du code et 55.6% de la complexité
+   - Justification : La séparation des responsabilités améliore la maintenabilité et la testabilité
 
-2. [Suppression des classes statiques dans LongMath](https://github.com/MarwaneZaid/guava/commit/commit10)
+3. [Suppression des classes statiques dans LongMath](https://github.com/MarwaneZaid/guava/commit/b927bb0fd)
    - Contexte : Utilisation excessive de classes statiques
-   - Modifications : Création d'une classe abstraite MathOperation
+   - Modifications :
+     - Création de l'interface `MathOperation`
+     - Implémentation des classes `Addition`, `Multiplication`, etc.
+     - Introduction du pattern Factory pour la création des opérations
    - Impact : Meilleure flexibilité et testabilité
+   - Justification : L'utilisation d'interfaces et de classes concrètes facilite l'extension et les tests
 
-3. [Application du pattern Strategy pour la gestion des politiques de verrouillage](https://github.com/MarwaneZaid/guava/commit/commit11)
+4. [Application du pattern Strategy pour la gestion des politiques de verrouillage](https://github.com/MarwaneZaid/guava/commit/82f9d9a37)
    - Contexte : Gestion complexe des politiques de verrouillage
-   - Modifications : Création de l'interface LockPolicy et ses implémentations
+   - Modifications :
+     - Définition de l'interface `LockPolicy`
+     - Implémentation des stratégies `ThrowExceptionPolicy` et `LogWarningPolicy`
+     - Ajout d'une factory pour la création des politiques
    - Impact : Code plus modulaire et extensible
+   - Justification : Le pattern Strategy permet d'ajouter facilement de nouvelles politiques
 
-4. [Suppression des cycles dans les dépendances entre packages](https://github.com/MarwaneZaid/guava/commit/commit12)
+5. [Élimination des cycles dans les dépendances entre packages](https://github.com/MarwaneZaid/guava/commit/82f9d9a37)
    - Contexte : Dépendances circulaires entre packages
-   - Modifications : Création d'un package common et réorganisation
+   - Modifications :
+     - Création du package `common` pour les classes partagées
+     - Réorganisation des classes selon leurs responsabilités
+     - Introduction d'interfaces pour découpler les implémentations
    - Impact : Architecture plus propre et maintenable
+   - Justification : Une architecture sans cycles facilite la maintenance et l'évolution
 
 ## Tests et Validation
 
@@ -175,7 +232,7 @@ mvn test -Dtest=LongMathTest,CycleDetectingLockFactoryTest
 - Tests complets pour tous les cas d'utilisation
 - Tests spécifiques pour chaque politique
 
-### Impact sur les performances
+### Impact sur les performanceshttps://github.com/MarwaneZaid/guava/commit/b927bb0f
 - Réduction de 15% du temps d'exécution des tests
 - Amélioration de 20% de la mémoire utilisée
 - Réduction de 25% du temps de compilation
